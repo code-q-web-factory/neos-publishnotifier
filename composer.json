@@ -1,13 +1,14 @@
 {
-    "description": "Publish notifier for Neos",
+    "description": "This package sends notifications to admins every time someone publishes to an internal workspace.",
     "type": "neos-package",
     "name": "codeq/publishnotifier",
     "require": {
-        "typo3/flow": "~4.0"
+        "neos/neos": "^3.0",
+        "neos/swiftmailer": "*"
     },
     "autoload": {
         "psr-4": {
-            "CodeQ\\PublishNotifier\\": "Classes"
+            "CodeQ\\PublishNotifier\\": "Classes/"
         }
     },
     "extra": {

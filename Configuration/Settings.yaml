@@ -1,0 +1,11 @@
+CodeQ:
+  PublishNotifier:
+    senderName: 'Neos'
+    senderAddress: 'no-reply@neos-server.com'
+    notifyEmails:
+      - 'admin1@your.name'
+      - 'admin2@your.name'
+    subject: '%1$s has published changes'
+    body: |+
+      %1$s has published changes to the private workspace %2$s.
+      Please review the changes and publish to live: %3$s'
