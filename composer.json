@@ -2,6 +2,7 @@
     "description": "This package sends notifications to admins every time someone publishes to an internal workspace.",
     "type": "neos-package",
     "name": "codeq/publishnotifier",
+    "license": "GPL-3.0+",
     "require": {
         "neos/neos": "^3.0",
         "neos/swiftmailer": "*"
