@@ -1,6 +1,7 @@
 <?php
 namespace CodeQ\PublishNotifier;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Log\SystemLoggerInterface;
 use Neos\SwiftMailer\Message;
 use Neos\ContentRepository\Domain\Model\Workspace;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
@@ -8,6 +9,12 @@ use Neos\Neos\Domain\Service\UserService;
 
 class Notifier
 {
+    /**
+     * @Flow\Inject
+     * @var SystemLoggerInterface
+     */
+    protected $systemLogger;
+
     /**
      * @Flow\Inject
      * @var UserService
@@ -54,15 +61,18 @@ class Notifier
             $body = sprintf($this->settings['body'], $userName, $targetWorkspaceName, $reviewUrl);
 
             foreach ($this->settings['notifyEmails'] as $email) {
-                $mail = new Message();
-                $mail
-                ->setFrom(array($senderAddress => $senderName))
-                ->setTo(array($email => $email))
-                ->setSubject($subject);
-                $mail->setBody($body, 'text/plain');
-                $mail->send();
+                try {
+                    $mail = new Message();
+                    $mail
+                    ->setFrom(array($senderAddress => $senderName))
+                    ->setTo(array($email => $email))
+                    ->setSubject($subject);
+                    $mail->setBody($body, 'text/plain');
+                    $mail->send();
+                } catch (\Exception $exception) {
+                    $this->systemLogger->logException($exception);
+                }
             }
         }
     }
-
 }
