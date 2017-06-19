@@ -49,7 +49,7 @@ class Notifier
      */
     public function notify($node, $targetWorkspace)
     {
-        if ($targetWorkspace->isPrivateWorkspace()) {
+        if ($targetWorkspace->isPrivateWorkspace() || $targetWorkspace->isInternalWorkspace()) {
             $currentUser = $this->userService->getCurrentUser();
             $userName = $currentUser->getLabel();
             $targetWorkspaceName = $targetWorkspace->getTitle();
