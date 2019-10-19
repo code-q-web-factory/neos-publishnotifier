@@ -127,7 +127,8 @@ class Notifier
                 throw new InvalidConfigurationException('The CodeQ.PublishNotifier slack.postTo ' . $postToKey . ' requires a webhookUrl.');
             }
 
-            $client = new Client($postTo['webhookUrl'], $postTo['clientSettings']);
+            $clientSetting = isset($postTo['clientSettings']) ? $postTo['clientSettings'] : [];
+            $client = new Client($postTo['webhookUrl'], $clientSetting);
             $slackMessage = $client->createMessage();
             $slackMessage->send($message);
         }
