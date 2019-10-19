@@ -8,7 +8,7 @@ CodeQ:
       subject: '%1$s has published changes'
       body: |+
         %1$s has published changes to the private workspace %2$s.
-        Please review the changes and publish to live: %3$s'
+        Please review the changes and publish to live: %3$s
     slack:
       enabled: false
       postTo: []
@@ -17,4 +17,4 @@ CodeQ:
         #  clientSettings: [] # additional client configurations
       message: |+
         %1$s has published changes to the private workspace %2$s.
-        Please review the changes and publish to live: %3$s'
+        Please review the changes and publish to live: %3$s
