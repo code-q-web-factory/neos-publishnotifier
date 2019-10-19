@@ -1,9 +1,20 @@
 CodeQ:
   PublishNotifier:
-    senderName: 'Neos'
-    senderAddress: 'no-reply@neos-server.com'
-    notifyEmails: []
-    subject: '%1$s has published changes'
-    body: |+
-      %1$s has published changes to the private workspace %2$s.
-      Please review the changes and publish to live: %3$s'
+    email:
+      enabled: false
+      senderName: 'Neos'
+      senderAddress: 'no-reply@neos-server.com'
+      notifyEmails: []
+      subject: '%1$s has published changes'
+      body: |+
+        %1$s has published changes to the private workspace %2$s.
+        Please review the changes and publish to live: %3$s'
+    slack:
+      enabled: false
+      postTo: []
+        #example:
+        #  webhookUrl: 'https://hooks.slack.com/services/...'
+        #  clientSettings: [] # additional client configurations
+      message: |+
+        %1$s has published changes to the private workspace %2$s.
+        Please review the changes and publish to live: %3$s'
