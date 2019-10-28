@@ -9,7 +9,7 @@ Simply install the package via composer:
 composer require codeq/publishnotifier
 ```
 
-Make sure your site has `Neos.Flow.http.baseUri` setting set, so your reviewers would get correct urls.
+Make sure your site has `Neos.Flow.http.baseUri` setting set, so your reviewers would get correct urls. If you don't want to do this, you can manually add teh domain to the message like `Please review the changes and publish to live: https://example.com/%3$s'`
 
 ## Configuration for email notifications
 
