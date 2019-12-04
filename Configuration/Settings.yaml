@@ -16,5 +16,5 @@ CodeQ:
         #  webhookUrl: 'https://hooks.slack.com/services/...'
         #  clientSettings: [] # additional client configurations
       message: |+
-        %1$s has published changes to the private workspace %2$s.
-        Please review the changes and publish to live: %3$s
+        *%1$s* has published changes to the workspace *%2$s*.
+        Please review the changes and publish to live: <%3$s|here>
