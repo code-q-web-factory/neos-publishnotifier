@@ -1,5 +1,8 @@
 CodeQ:
   PublishNotifier:
+    notify:
+      publicWorkspace: false # Send Notification for changes to LIVE Workspace
+      everyChange: false # Send Notification for every Change in a Workspace
     email:
       enabled: false
       senderName: 'Neos'

@@ -142,11 +142,18 @@ class Notifier
      */
     public function notify($node, $targetWorkspace)
     {
-        if($this->publishingService->getUnpublishedNodes($targetWorkspace)) {
+        if($this->publishingService->getUnpublishedNodes($targetWorkspace) && !$this->settings['notify']['everyChange']) {
             // there were already notifications, because of earlier changes.
             return;
         }
-        if ($targetWorkspace->isPersonalWorkspace() || $targetWorkspace->isPublicWorkspace()) {
+
+        if ($targetWorkspace->isPersonalWorkspace()) {
+            // skip changes to personal workspace
+            return;
+        }
+
+        if ($targetWorkspace->isPublicWorkspace() && !$this->settings['notify']['publicWorkspace']) {
+            // skip changes to public workspace
             return;
         }
 
