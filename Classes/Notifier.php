@@ -142,19 +142,23 @@ class Notifier
      */
     public function notify($node, $targetWorkspace)
     {
-        // there were already notifications, because of earlier changes
-        if($this->publishingService->getUnpublishedNodes($targetWorkspace) && !$this->settings['notify']['internalWorkspaceWithUnpublishedChanges']) {
+        // skip changes to personal workspace
+        if ($targetWorkspace->isPersonalWorkspace()) {
+            return;
+        }
+
+        // skip changes to public/live workspace
+        if ($targetWorkspace->isPublicWorkspace() && !$this->settings['notify']['publicWorkspace']) {
+            return;
+        }
+
+        // skip changes to internal workspace if there were already notifications, because of earlier changes
+        if($targetWorkspace->isInternalWorkspace() && $this->publishingService->getUnpublishedNodes($targetWorkspace) && $this->settings['notify']['internalWorkspace']['onlyFirstChange'] && !$this->settings['notify']['internalWorkspace']['everyChange']) {
             return;
         }
 
         // skip changes to internal workspace
-        if ($targetWorkspace->isPersonalWorkspace() && !$this->settings['notify']['internalWorkspaceWithoutUnpublishedChanges']) {
-            // skip changes to personal workspace
-            return;
-        }
-
-        // skip changes to public workspace
-        if ($targetWorkspace->isPublicWorkspace() && !$this->settings['notify']['publicWorkspace']) {
+        if($targetWorkspace->isInternalWorkspace() && !$this->settings['notify']['internalWorkspace']['everyChange'] && !$this->settings['notify']['internalWorkspace']['onlyFirstChange']){
             return;
         }
 
