@@ -2,9 +2,9 @@ CodeQ:
   PublishNotifier:
     notify:
       internalWorkspace:
-        everyChange: false     # Send notification if publishing to any internal workspace
-        onlyFirstChange: true # Send notification ONLY for the first time publishing to an internal workspace
-      publicWorkspace: false  # Send notification for publishing to LIVE Workspace
+        onFirstChange: true      # Send notification for publishing to an internal workspace WITHOUT unpublished changes in the workspace
+        onAdditionalChange: true # Send notification for publishing to an internal workspace WITH unpublished changes present in the workspace
+      publicWorkspace: false     # Send notification for publishing to the LIVE Workspace
     email:
       enabled: false
       senderName: 'Neos'

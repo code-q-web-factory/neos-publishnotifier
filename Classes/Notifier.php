@@ -152,14 +152,16 @@ class Notifier
             return;
         }
 
-        // skip changes to internal workspace if there were already notifications, because of earlier changes
-        if($targetWorkspace->isInternalWorkspace() && $this->publishingService->getUnpublishedNodes($targetWorkspace) && $this->settings['notify']['internalWorkspace']['onlyFirstChange'] && !$this->settings['notify']['internalWorkspace']['everyChange']) {
-            return;
-        }
+        if($targetWorkspace->isInternalWorkspace()) {
+            $isFirstChangeInWorkspace = !$this->publishingService->getUnpublishedNodes($targetWorkspace);
 
-        // skip changes to internal workspace
-        if($targetWorkspace->isInternalWorkspace() && !$this->settings['notify']['internalWorkspace']['everyChange'] && !$this->settings['notify']['internalWorkspace']['onlyFirstChange']){
-            return;
+            if ($isFirstChangeInWorkspace && !$this->settings['notify']['internalWorkspace']['onFirstChange']) {
+                return;
+            }
+
+            if (!$isFirstChangeInWorkspace && !$this->settings['notify']['internalWorkspace']['onAdditionalChange']) {
+                return;
+            }
         }
 
         $this->sendEmails($targetWorkspace);
