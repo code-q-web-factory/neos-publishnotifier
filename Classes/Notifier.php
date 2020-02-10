@@ -6,7 +6,7 @@ namespace CodeQ\PublishNotifier;
 
 use Maknz\Slack\Client;
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Log\SystemLoggerInterface;
+use Psr\Log\LoggerInterface;
 use Neos\Flow\Configuration\Exception\InvalidConfigurationException;
 use Neos\SwiftMailer\Message;
 use Neos\ContentRepository\Domain\Model\Workspace;
@@ -18,7 +18,7 @@ class Notifier
 {
     /**
      * @Flow\Inject
-     * @var SystemLoggerInterface
+     * @var LoggerInterface
      */
     protected $systemLogger;
 
