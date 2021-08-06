@@ -118,7 +118,13 @@ class Notifier
         $currentUser = $this->userService->getCurrentUser();
         $currentUserName = $currentUser->getLabel();
         $targetWorkspaceName = $targetWorkspace->getTitle();
-        $reviewUrl = sprintf('%1$s/neos/management/workspaces/show?moduleArguments[workspace][__identity]=%2$s', $this->baseUri, $targetWorkspace->getName());
+        
+        // Generate review Url if not a public Workspace
+        if ($targetWorkspace->isPublicWorkspace()) {
+            $reviewUrl = sprintf('%1$s/neos/management/workspaces/', $this->baseUri);
+        } else {
+            $reviewUrl = sprintf('%1$s/neos/management/workspaces/show?moduleArguments[workspace][__identity]=%2$s', $this->baseUri, $targetWorkspace->getName());
+        }
 
         $message = sprintf($this->settings['slack']['message'], $currentUserName, $targetWorkspaceName, $reviewUrl);
 
