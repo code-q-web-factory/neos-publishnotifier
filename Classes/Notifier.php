@@ -14,6 +14,9 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Service\PublishingServiceInterface;
 use Neos\Neos\Domain\Service\UserService;
 
+/**
+ * @Flow\Scope("singleton")
+ */
 class Notifier
 {
     /**
@@ -44,6 +47,11 @@ class Notifier
      * @var array
      */
     protected $settings;
+
+    /**
+     * @var bool
+     */
+    protected $notificationHasBeenSentInCurrentInstance = false;
 
     /**
      * Inject the settings
@@ -142,6 +150,11 @@ class Notifier
      */
     public function notify($node, $targetWorkspace)
     {
+        // skip sending another notification if more than one node is to be published
+        if ($this->notificationHasBeenSentInCurrentInstance) {
+            return;
+        }
+
         // skip changes to personal workspace
         if ($targetWorkspace->isPersonalWorkspace()) {
             return;
@@ -166,5 +179,6 @@ class Notifier
 
         $this->sendEmails($targetWorkspace);
         $this->sendSlackMessages($targetWorkspace);
+        $this->notificationHasBeenSentInCurrentInstance = true;
     }
 }
