@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace CodeQ\PublishNotifier;
 
-use Maknz\Slack\Client;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\Client\Browser;
+use Neos\Flow\Http\Client\CurlEngine;
+use Neos\Flow\Log\Utility\LogEnvironment;
+use Neos\Http\Factories\ServerRequestFactory;
+use Neos\Http\Factories\StreamFactory;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Neos\Flow\Configuration\Exception\InvalidConfigurationException;
 use Neos\SwiftMailer\Message;
@@ -36,6 +41,18 @@ class Notifier
      * @var PublishingServiceInterface
      */
     protected $publishingService;
+
+    /**
+     * @Flow\Inject
+     * @var ServerRequestFactory
+     */
+    protected $serverRequestFactory;
+
+    /**
+     * @Flow\Inject
+     * @var StreamFactory
+     */
+    protected $streamFactory;
 
     /**
      * @Flow\InjectConfiguration(package="Neos.Flow", path="http.baseUri")
@@ -108,7 +125,7 @@ class Notifier
     }
 
     /**
-     * Send out a slack message for a change in a workspace.
+     * Send out a Slack message for a change in a workspace.
      *
      * @param Workspace $targetWorkspace
      * @return void
@@ -135,10 +152,24 @@ class Notifier
                 throw new InvalidConfigurationException('The CodeQ.PublishNotifier slack.postTo ' . $postToKey . ' requires a webhookUrl.');
             }
 
-            $clientSetting = isset($postTo['clientSettings']) ? $postTo['clientSettings'] : [];
-            $client = new Client($postTo['webhookUrl'], $clientSetting);
-            $slackMessage = $client->createMessage();
-            $slackMessage->send($message);
+            try {
+                $browser = new Browser();
+                $engine = new CurlEngine();
+                $engine->setOption(CURLOPT_TIMEOUT, 0);
+                $browser->setRequestEngine($engine);
+
+                $requestBody = array(
+                    "text" => $message
+                );
+
+                $slackRequest = $this->serverRequestFactory->createServerRequest('POST', $postTo['webhookUrl'])
+                    ->withHeader('Content-Type', 'application/json')
+                    ->withBody($this->streamFactory->createStream(json_encode($requestBody)));
+
+                $browser->sendRequest($slackRequest);
+            } catch (ClientExceptionInterface $e) {
+                $this->systemLogger->warning(sprintf('Could not send message to Slack webhook %s with message "%s"', $postTo['webhookUrl'], $message), LogEnvironment::fromMethodName(__METHOD__));
+            }
         }
     }
 
