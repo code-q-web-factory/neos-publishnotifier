@@ -23,3 +23,13 @@ CodeQ:
       message: |+
         *%1$s* has published changes to the workspace *%2$s*.
         Please review the changes and publish to live: <%3$s|here>
+
+Neos:
+  ContentRepositoryRegistry:
+    presets:
+      'default':
+        projections:
+          'Neos.ContentRepository:Workspace':
+            catchUpHooks:
+              'CodeQ.PublishNotifier:WorkspacePublishHook':
+                factoryObjectName: CodeQ\PublishNotifier\CatchUpHook\WorkspacePublishHookFactory

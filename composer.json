@@ -4,9 +4,9 @@
     "name": "codeq/publishnotifier",
     "license": "GPL-3.0+",
     "require": {
-        "neos/neos": "~4.0 || ~5.0 || ~7.0 || ~8.0 || dev-master",
+        "neos/neos": "~9.0 || dev-master",
         "neos/swiftmailer": "*",
-        "psr/log": "^1.0 || ^2.0",
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
         "jolicode/slack-php-api": "~4.5.0",
         "guzzlehttp/guzzle": "^7.0",
         "ext-curl": "*"
